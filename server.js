@@ -3,10 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+// new code below
+var session = require('express-session');
+var passport = require('passport');
 
 require('dotenv').config();
 // connect to the database with AFTER the config vars are processed
 require('./config/database');
+require('./config/passport')
 
 const indexRouter = require('./routes/index');
 const moviesRouter = require('./routes/movies');
@@ -25,6 +29,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+// the logged in user is in a user variable that's available inside all EJS templates
+app.use(function(req, res, next) {
+  res.locals.user = req.user
+  next()
+})
 
 app.use('/', indexRouter);
 app.use('/movies', moviesRouter);

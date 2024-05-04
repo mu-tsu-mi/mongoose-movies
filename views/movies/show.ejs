@@ -19,6 +19,7 @@
   <!-- end cast list -->
 </section>
 <!-- add to cast form below this comment -->
+<% if(user) { %>
 <form id="add-per-to-cast" action="/movies/<%= movie._id %>/performers" method="POST">
   <select name="performerId">
     <!-- Emit an option for each performer -->
@@ -44,11 +45,13 @@
   </select>
   <input type="submit" value="Add Review">
 </form>
+<% }  %> 
 
 <% if (movie.reviews.length) { %>
   <table>
     <thead>
       <tr>
+        <th>User</th>
         <th>Date</th>
         <th>Review</th>
         <th>Rating</th>
@@ -62,6 +65,7 @@
         <% total += r.rating %>
         <tr>
           <!-- .toLocaleDateString() provides a more friendly date format -->
+          <td class="review-user"><img alt="avatar" src="<%= r.userAvatar %>" referrerpolicy="no-referrer" ><%= r.userName %></td>
           <td><%= r.createdAt.toLocaleDateString() %></td>
           <td><%= r.content %></td>
           <td><%= r.rating %></td>

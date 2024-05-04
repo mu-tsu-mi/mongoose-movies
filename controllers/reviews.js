@@ -6,6 +6,12 @@ module.exports = {
 
 async function create(req, res) {
   const movie = await Movie.findById(req.params.id);
+
+  // Add the user-centric info to req.body (the new review)
+  req.body.user = req.user._id;
+  req.body.userName = req.user.name;
+  req.body.userAvatar = req.user.avatar;
+  
   // We can push (or unshift) subdocs into Mongoose arrays
   movie.reviews.push(req.body);
   try {
