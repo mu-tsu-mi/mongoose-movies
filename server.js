@@ -6,6 +6,7 @@ var logger = require('morgan');
 // new code below
 var session = require('express-session');
 var passport = require('passport');
+const methodOverride = require('method-override')
 
 require('dotenv').config();
 // connect to the database with AFTER the config vars are processed
@@ -16,7 +17,6 @@ const indexRouter = require('./routes/index');
 const moviesRouter = require('./routes/movies');
 const reviewsRouter = require('./routes/reviews');
 const performersRouter = require('./routes/performers');
-
 
 var app = express();
 
@@ -29,6 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('_method'))
 app.use(session({
   secret: process.env.SECRET,
   resave: false,
